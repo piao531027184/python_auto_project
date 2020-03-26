@@ -1,0 +1,35 @@
+终端执行： pytest xxx.py
+pytest -v                              打印详细运行日志信息
+pytest -s                              输出详细信息
+pytest xxx.py::类名                     运行pytest里的某个类
+pytest xxx.py::类名::方法名              运行pytest里某个类里的某个方法
+pytest xxx.py -k "类名 and not 方法名"   跳过运行某个类中的方法
+pytest xxx.py -m[标记名]                运行标记的一类测试用例
+pytest xxx.py -x                       一旦运行到用例报错就停止
+pytest xxx.py --maxfail=[num]          当运行出错误的用例数达到num的时候就停止
+
+pytest测试失败后重新运行n次，重新运行之间添加延迟时间，间隔n秒再运行：
+需先安装：pip install pytest-rerunfailures
+再执行：
+      pytest -v --reruns 5 --reruns-delay 1 xxx.py   遇到错误的用例重复执行5次，每次间隔1秒
+
+pytest多条断言即使有失败也运行所有断言：
+需先安装：pip install pytest-assume
+再执行：
+      pytest.assume(1==4)
+      pytest.assume(1==1)
+
+pytest执行用例时，有的用例需要登录才能执行 ，有些用例不需要登录，setup和teardown无法满足，需要使用fixture
+步骤：
+      在登陆的函数上面加@pytest.fixture()
+      在要使用的测试方法中传入（登录函数名称），就先执行登录的函数
+      不传入的就不登录直接执行测试方法
+
+若要测试用例后销毁清除数据，通过在同一模块中加入yield关键字，yield是调用第一次返回结果，第二次执行它下面的语句返回
+步骤：
+      在@pytest.fixture(scope=module)
+      在登录的方法中加yield，之后销毁清除的步骤
+
+fixture通过固定参数request传递
+步骤：
+      在fixture中添加@pytest.fixture(params=[1,2,3,'a']),在方法参数中写request
