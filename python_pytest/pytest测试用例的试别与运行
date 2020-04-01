@@ -33,3 +33,17 @@ pytest执行用例时，有的用例需要登录才能执行 ，有些用例不�
 fixture通过固定参数request传递
 步骤：
       在fixture中添加@pytest.fixture(params=[1,2,3,'a']),在方法参数中写request
+
+
+allure:
+    运行生产测试结果: pytest 测试文件 --alluredir report/allure_raw
+    运行生成测试报告: allure generate report/allure_raw -o report/allure_roport --clean
+    运行指定的模块: pytest 测试文件 --allure-features '模块名称'
+    运行指定模块下的指定功能: pytest 测试文件 --allure-stories '功能名称'
+
+    可以通过allure.severity来附加标记级别分类
+        Trivial:不重要 , Minor:不太重要 , Normal:正常问题 , Critical:严重 , Blocker:阻塞
+     步骤:
+         在方法,函数和类上面加 @allure.severity(allure.severity_level.TRIVAL)
+     执行时:
+         pytest 测试文件 --alluredir report/allure_raw --allure-severities trival,normal
